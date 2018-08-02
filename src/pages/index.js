@@ -4,7 +4,8 @@ import FechaActualizacion from '../components/fecha-actualizacion'
 import Cambios from '../components/cambios'
 import Layout from '../components/layout'
 
-import GSheet from 'picosheet'
+import GSheet from '../picosheet'
+
 import LocalForage from 'localforage'
 
 import { VOTE_TYPE, VOTE_CLASS } from '../constants'
@@ -16,11 +17,7 @@ const store = LocalForage.createInstance({
 })
 
 const processVotes = (data) => data.reduce((votes, p) => {
-  if      (p.PosicionCON_MODIF === VOTE_TYPE.AFAVOR) { votes.aFavor++ }
-  else if (p.PosicionCON_MODIF === VOTE_TYPE.CONTRA) { votes.enContra++ }
-  else if (p.PosicionCON_MODIF === VOTE_TYPE.NOCONF) { votes.noConfirmado++ }
-  else if (p.PosicionCON_MODIF === VOTE_TYPE.ABSTEN) { votes.seAbstiene++ }
-  else { console.error('no data', p) }
+  if (p.PosicionCON_MODIF === VOTE_TYPE.AFAVOR) { votes.aFavor++ } else if (p.PosicionCON_MODIF === VOTE_TYPE.CONTRA) { votes.enContra++ } else if (p.PosicionCON_MODIF === VOTE_TYPE.NOCONF) { votes.noConfirmado++ } else if (p.PosicionCON_MODIF === VOTE_TYPE.ABSTEN) { votes.seAbstiene++ } else { console.error('no data', p) }
 
   return votes
 }, {
@@ -89,7 +86,7 @@ export default class extends React.Component {
       store.setItem(KEY, current)
       this.setState(state => processState({
         votes: processVotes(current),
-        changes: diffVotes(current, previous),
+        changed: diffVotes(current, previous)
       }))
     })
   }
