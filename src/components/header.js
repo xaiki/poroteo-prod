@@ -1,9 +1,13 @@
+import React from 'react'
+
+import lasdesistemas from '../img/logos/lasdesistemas.png'
+
 export default () => (
   <header className='header'>
     <a href='/'>
       <img
         className='lasdesistemas-logo'
-        src='static/assets/img/logos/lasdesistemas.png'
+        src={lasdesistemas}
         alt='[LAS] de sistemas' />
     </a>
     <h1 className='title'><span className='main'>Votación en senadores</span> <span className='sub'>de la ley de aborto legal, seguro y gratuito en Argentina</span></h1>
@@ -42,6 +46,6 @@ export default () => (
           font-size: 20px;
         }
       }
-    `}</style>
+            `}</style>
   </header>
 )
