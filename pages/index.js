@@ -1,11 +1,9 @@
 import React from 'react'
-import Head from '../components/head'
-import Header from '../components/header'
 import Tarjeta from '../components/tarjeta'
 import FechaActualizacion from '../components/fecha-actualizacion'
 import Cambios from '../components/cambios'
-import Links from '../components/links'
-import Footer from '../components/footer'
+import Layout from '../components/layout'
+
 import GSheet from 'picosheet'
 import LocalForage from 'localforage'
 
@@ -98,9 +96,7 @@ export default class extends React.Component {
 
   render () {
     return (
-      <div className='container'>
-        <Head />
-        <Header />
+      <Layout>
         {
           this.state.votos &&
           <div className='fila'>
@@ -117,17 +113,8 @@ export default class extends React.Component {
         <FechaActualizacion fecha={this.state.fecha} />
         }
         <Cambios changed={this.state.changed} />
-        <Links />
-        <Footer />
         <style jsx>{`
-              .container {
-                height: 100vh;
-                flex-wrap: wrap;
-                align-items: space-between;
-                justify-content: center;
-                display:flex;
-              }
-              .fila {
+             .fila {
                 margin: auto;
                 width: 90%;
                 display: flex;
@@ -146,8 +133,9 @@ export default class extends React.Component {
                 width:100%;
                 min-height:10px;
               }
-                `}</style>
-      </div>
+                `}
+        </style>
+      </Layout>
     )
   }
 }
