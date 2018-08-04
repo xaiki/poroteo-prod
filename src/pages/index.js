@@ -5,16 +5,17 @@ import IO from 'socket.io-client'
 
 import GSheet from '../picosheet'
 
+import asyncComponent from '../components/async'
 import Header from '../components/header'
 import FechaActualizacion from '../components/fecha-actualizacion'
-import Cambios from '../components/cambios'
 import Links from '../components/links'
 import Footer from '../components/footer'
 
-import Senators from './senators'
-import Home from './home'
-
 import { VOTE_TYPE, SENATORS_KEY, CHANGED_KEY, SHEET_ID, SOCKET_HOST } from '../constants'
+
+const Cambios = asyncComponent(() => import('../components/cambios'))
+const Senators = asyncComponent(() => import('./senators'))
+const Home = asyncComponent(() => import('./home'))
 
 const store = LocalForage.createInstance({
   name: 'poroteo'
