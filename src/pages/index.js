@@ -13,6 +13,8 @@ import Footer from '../components/footer'
 import Senators from './senators'
 import Home from './home'
 
+import IPFS from '../ipfs'
+
 import { VOTE_TYPE, SENATORS_KEY, CHANGED_KEY, SHEET_ID } from '../constants'
 
 const store = LocalForage.createInstance({
@@ -88,9 +90,24 @@ const arrayEqual = (a, b) => {
 export default class extends React.Component {
   constructor (props) {
     super(props)
-    this.state = {
 
+    this.state = {
+      broadcasts: []
     }
+
+    IPFS()
+      .then(db => {
+        this.db = db
+        db.events.on('replicated', (address) => {
+          console.log('replicated', 'foreal')
+          db.iterator({ limit: 1 }).collect()
+                 .map(e => this.setState(state => ({
+                   broadcasts: [...state.broadcasts, e.payload.value]
+                 })))
+        })
+      })
+
+
     this.update()
   }
 
@@ -140,23 +157,26 @@ export default class extends React.Component {
   }
 
   render () {
-    const { votos, senators, changed, fecha, loading } = this.state
+    const { votos, senators, changed, fecha, loading, broadcasts } = this.state
     if (!votos || ! senators ) return <p>Cargando…</p>
+
     return (
-      <div className='container'>
+    <div className='container'>
         { loading && <p>Cargando...</p>}
+        { (broadcasts && broadcasts.length)
+          && <marquee>ultimas noticias: {broadcasts.slice(-1)}</marquee>}
         <Header />
         <Switch>
-          <Route path={`/${SENATORS_KEY}/by-vote/:vote`} render={props => (
-            <Senators senators={senators} {...props} />
-          )} />
-          <Route render={props => (
-            <Home votos={votos} {...props} />
-          )} />
+            <Route path={`/${SENATORS_KEY}/by-vote/:vote`} render={props => (
+              <Senators senators={senators} {...props} />
+            )} />
+            <Route render={props => (
+              <Home votos={votos} {...props} />
+            )} />
         </Switch>
 
         {fecha &&
-        <FechaActualizacion fecha={fecha} />
+         <FechaActualizacion fecha={fecha} />
         }
         <Cambios changed={changed.map(c => senators[c.i])} />
         <Links />
@@ -171,7 +191,7 @@ export default class extends React.Component {
           }
           `}
         </style>
-      </div>
+    </div>
     )
   }
 }
