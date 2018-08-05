@@ -1,6 +1,6 @@
 {
   "name": "create-next-example-app",
-  "homepage": "/",
+  "homepage": "https://poroteo.cf",
   "reactSnap": {
     "puppeteerArgs": [
       "--no-sandbox"
